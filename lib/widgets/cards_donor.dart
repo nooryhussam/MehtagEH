@@ -21,26 +21,45 @@ class CardsDonor extends StatelessWidget {
   final String score;
   final VoidCallback onTap;
 
+  Color _getBgColor() {
+    switch (score) {
+      case 'عاجل':
+        return const Color(0xFFFFE2E2);
+      case 'متوسط':
+        return const Color(0XFFFEF2E7);
+      case 'منخفض':
+        return const Color(0xFFDCFCE7);
+      default:
+        return const Color(0xFFF3F4F6);
+    }
+  }
+
+  Color _getTextColor() {
+    switch (score) {
+      case 'عاجل':
+        return const Color(0xFFDC2626);
+      case 'متوسط':
+        return const Color(0xFFC1630B);
+      case 'منخفض':
+        return const Color(0xFF2BA12F);
+      default:
+        return const Color(0xFF6A7282);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 24.w),
-      padding: EdgeInsets.only(
-        top: 20.76.h,
-        bottom: 0.78.h,
-        left: 20.76.w,
-        right: 20.76.w,
-      ),
-      height: 267.h,
-      width: 350.w,
+      padding: EdgeInsets.symmetric(horizontal: 20.76.w, vertical: 16.h),
+      width: 327.w,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(24.r),
         border: Border.all(color: const Color(0xFFBEF9C4), width: 0.78.w),
       ),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: MainAxisSize.min, // ← مهم
         textDirection: TextDirection.rtl,
         children: [
           ListTile(
@@ -57,7 +76,7 @@ class CardsDonor extends StatelessWidget {
                   ),
                   textAlign: TextAlign.right,
                 ),
-                SizedBox(height: 10.h),
+                SizedBox(height: 6.h),
                 Text(
                   subtitle,
                   style: GoogleFonts.tajawal(
@@ -69,55 +88,51 @@ class CardsDonor extends StatelessWidget {
               ],
             ),
           ),
-
-          SizedBox(height: 12.h),
-
+          SizedBox(height: 10.h),
           Row(
             textDirection: TextDirection.rtl,
             children: [
               Icon(
                 Icons.location_on_outlined,
                 color: const Color(0xFF737373),
-                size: 20.r,
+                size: 18.r,
               ),
-              SizedBox(width: 7.w),
+              SizedBox(width: 4.w),
               Text(
                 textlocation,
                 style: GoogleFonts.tajawal(
-                  fontSize: 14.sp,
+                  fontSize: 13.sp,
                   fontWeight: FontWeight.w400,
                   color: const Color(0xFF737373),
                 ),
+                overflow: TextOverflow.ellipsis,
               ),
-              const Spacer(),
-              ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                  elevation: 0,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 10.w,
-                    vertical: 4.h,
-                  ),
-                  minimumSize: Size(66.w, 25.h),
-                  side: BorderSide(
-                    color: const Color(0xFFDC2626),
-                    width: 0.78.w,
-                  ),
-                  backgroundColor: const Color(0xFFFEF2E7),
+
+              SizedBox(width: 16.w),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                decoration: BoxDecoration(
+                  color: _getBgColor(),
+                  borderRadius: BorderRadius.circular(999.r),
                 ),
-                iconAlignment: IconAlignment.end,
-                icon: Image.asset(
-                  'assets/icons/clock.png',
-                  width: 13.w,
-                  height: 13.h,
-                ),
-                onPressed: () {},
-                label: Text(
-                  score,
-                  style: GoogleFonts.tajawal(
-                    color: const Color(0xFFDC2626),
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.w400,
-                  ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      score,
+                      style: GoogleFonts.tajawal(
+                        color: _getTextColor(),
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    SizedBox(width: 4.w),
+                    Icon(
+                      Icons.access_time_outlined,
+                      color: _getTextColor(),
+                      size: 14.r,
+                    ),
+                  ],
                 ),
               ),
             ],

@@ -13,21 +13,23 @@ class CustomTextField extends StatelessWidget {
     this.height,
     this.width,
     this.maxLines = 1,
+    this.obscureText = false,
   });
 
   final double? height;
   final double? width;
   final Widget? suffixIcon;
   final String hint;
-  final IconData? prefixIcon;
+  final Widget? prefixIcon;
   final TextEditingController? controller;
   final String? Function(String?)? validator;
   final TextInputType? keyboardType;
   final int maxLines;
-
+  final bool obscureText;
   @override
   Widget build(BuildContext context) {
     final field = TextFormField(
+   obscureText: obscureText,
       textDirection: TextDirection.rtl,
       textAlign: TextAlign.right,
       cursorColor: Colors.black,
@@ -39,9 +41,7 @@ class CustomTextField extends StatelessWidget {
       textAlignVertical: TextAlignVertical.top,
       decoration: InputDecoration(
         suffixIcon: suffixIcon,
-        prefixIcon: prefixIcon != null
-            ? Icon(prefixIcon, color: const Color(0xff666666))
-            : null,
+        prefixIcon: prefixIcon,
         hintText: hint,
         hintStyle: GoogleFonts.tajawal(color: const Color(0xff999999)),
         filled: true,

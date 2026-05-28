@@ -117,12 +117,12 @@ class ContentOnboarding extends StatelessWidget {
                       ),
                       child: Icon(Icons.arrow_back, size: 24.w),
                     )
-                  : const SizedBox.shrink(), // Better than empty SizedBox if using spaceBetween
+                  : const SizedBox.shrink(),
               // Next/Start Button
               OutlinedButton.icon(
                 onPressed: () {
                   if (index == totalPages - 1) {
-                    Navigator.pushNamed(context, AppRoutes.loginScreen);
+                    Navigator.pushNamed(context, AppRoutes.chooseUser);
                   } else {
                     controller.nextPage(
                       duration: const Duration(milliseconds: 500),

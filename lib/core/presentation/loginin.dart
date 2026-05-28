@@ -43,6 +43,7 @@ class _LoginState extends State<Login> {
     );
   }
 
+  bool _isObscure = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,7 +55,6 @@ class _LoginState extends State<Login> {
             listener: (context, state) async {
               if (state is AuthSuccess) {
                 if (state.role == UserRole.requester) {
-                  // جلب بيانات المحتاج وتخزين التوكن
                   final requesterCubit = context.read<RequesterCubit>();
                   await requesterCubit.loadUserFromToken(state.token);
 
@@ -65,7 +65,6 @@ class _LoginState extends State<Login> {
                     (route) => false,
                   );
                 } else if (state.role == UserRole.donor) {
-                  // تحديث بيانات المتبرع بالتوكن الجديد لضمان عمل الطلبات اللاحقة
                   context.read<DonorCubit>().currentDonor = DonorModel(
                     name: state.userName ?? '',
                     email: '',
@@ -155,6 +154,21 @@ class _LoginState extends State<Login> {
                                   height: 24.r,
                                   color: const Color(0xFF666666),
                                 ),
+                                obscureText: _isObscure,
+
+                                prefixIcon: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _isObscure = !_isObscure;
+                                    });
+                                  },
+                                  icon: Icon(
+                                    _isObscure
+                                        ? Icons.visibility_off_outlined
+                                        : Icons.visibility_outlined,
+                                    color: const Color(0xFF666666),
+                                  ),
+                                ),
                                 hint: "كلمة السر",
                                 controller: _passcontroller,
                                 keyboardType: TextInputType.text,
@@ -175,10 +189,7 @@ class _LoginState extends State<Login> {
                                 decoration: TextDecoration.underline,
                                 color: Colors.black,
                               ),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  // إضافة منطق استعادة كلمة السر هنا
-                                },
+                              recognizer: TapGestureRecognizer()..onTap = () {},
                             ),
                           ),
                         ),
@@ -238,12 +249,12 @@ class _LoginState extends State<Login> {
                   ),
                   // Loading Overlay
                   if (state is AuthLoading)
-                    Container(
-                      color: Colors.black.withOpacity(0.3),
-                      child: const Center(
-                        child: CircularProgressIndicator(
-                          color: Color(0xFF1B5E20),
-                        ),
+                    // Container(
+                    //   color: Colors.black.withOpacity(0.3),
+                    const Center(
+                      child: CircularProgressIndicator(
+                        color: Color(0xFF1B5E20),
+                        // ),
                       ),
                     ),
                 ],

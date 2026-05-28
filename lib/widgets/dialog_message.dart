@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class DialogMessage extends StatelessWidget {
@@ -20,57 +21,57 @@ class DialogMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(24),
-      width: 343,
-      height: 373,
+      padding: EdgeInsets.all(24.r),
+      width: 343.w,
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: Color(0x40000000),
-            offset: Offset(-4, 8),
-            blurRadius: 8,
+            color: const Color(0x40000000),
+            offset: Offset(-4.w, 8.h),
+            blurRadius: 8.r,
             spreadRadius: 0,
           ),
           BoxShadow(
-            color: Color(0x40000000),
-            offset: Offset(4, -8),
-            blurRadius: 8,
+            color: const Color(0x40000000),
+            offset: Offset(4.w, -8.h),
+            blurRadius: 8.r,
             spreadRadius: 0,
           ),
         ],
-
         color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(24.r),
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Image.asset(imagepath, width: 159, height: 155),
-          const SizedBox(height: 32),
+          Image.asset(imagepath, width: 159.w, height: 155.h),
+          SizedBox(height: 32.h),
           Text(
             text,
             style: GoogleFonts.tajawal(
               color: Colors.black,
-              fontSize: 24,
+              fontSize: 24.sp,
               fontWeight: FontWeight.w700,
             ),
+            textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 33),
+          SizedBox(height: 33.h),
           ElevatedButton(
             onPressed: onTap,
             style: ElevatedButton.styleFrom(
               elevation: 6,
-              shadowColor: Color(0x40000000),
+              shadowColor: const Color(0x40000000),
               backgroundColor: color,
-              fixedSize: Size(279, 48),
+              fixedSize: Size(279.w, 48.h),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(24),
+                borderRadius: BorderRadius.circular(24.r),
               ),
             ),
             child: Text(
               text2,
               style: GoogleFonts.tajawal(
                 color: Colors.white,
-                fontSize: 16,
+                fontSize: 16.sp,
                 fontWeight: FontWeight.w700,
               ),
             ),

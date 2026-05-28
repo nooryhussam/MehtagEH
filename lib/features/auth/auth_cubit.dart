@@ -29,7 +29,6 @@ class AuthCubit extends Cubit<AuthState> {
 
       await TokenStorage.saveToken(token);
 
-      // Response shape: { token, data: { user: { name, role, ... }, donor: {...} } }
       final data = json['data'] as Map<String, dynamic>?;
       final userObj = data?['user'] as Map<String, dynamic>?;
 

@@ -50,9 +50,9 @@ class _RequesterServiceState extends State<RequesterService> {
       );
     } else if (review == 'in_progress' || review == 'completed') {
       return (
-        label: 'قيد المراجعة',
-        color: const Color(0xFFC1630B),
-        bgColor: const Color(0xFFFCE5CF),
+        label: 'جاري التنفيذ',
+        color: const Color(0xFF2BA12F),
+        bgColor: const Color(0xFFD7F4D8),
       );
     } else {
       return (
@@ -67,7 +67,7 @@ class _RequesterServiceState extends State<RequesterService> {
     switch (requestType) {
       case 'علاج':
         return 'assets/images/firstaid1.png';
-      case 'ملابس':
+      case 'لبس':
         return 'assets/images/cl2.png';
       case 'طعام':
         return 'assets/images/food1.png';
@@ -180,7 +180,6 @@ class _RequesterServiceState extends State<RequesterService> {
                     textbutton: 'تتبع الطلب',
                     color: statusData.color,
                     colorbutton: statusData.bgColor,
-                    // تم حذف title و subtitle و status لأن الكارت سيسحبهم من الموديل
                   ),
                 );
               },

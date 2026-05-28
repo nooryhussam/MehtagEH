@@ -8,8 +8,9 @@ import 'package:mahtage_eh/features/Requester/representation/screens/tracking.da
 import 'package:mahtage_eh/features/auth/auth_cubit.dart';
 import 'package:mahtage_eh/features/auth/auth_state.dart';
 import 'package:mahtage_eh/widgets/helpcard.dart';
-import 'package:mahtage_eh/widgets/carde_requester.dart'; // ← import الـ card
+import 'package:mahtage_eh/widgets/carde_requester.dart';
 import 'package:mahtage_eh/features/Requester/data/model/order_model.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HomeDetailsRequester extends StatefulWidget {
   const HomeDetailsRequester({super.key});
@@ -19,10 +20,18 @@ class HomeDetailsRequester extends StatefulWidget {
 }
 
 class _HomeDetailsRequesterState extends State<HomeDetailsRequester> {
+  final PageController _controller = PageController();
+
   @override
   void initState() {
     super.initState();
     context.read<RequesterCubit>().getRequests();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   final List<String> images = [
@@ -34,28 +43,28 @@ class _HomeDetailsRequesterState extends State<HomeDetailsRequester> {
   Color _getStatusTextColor(OrderModel order) {
     switch (order.computedStatus) {
       case 'delivery_completed':
-        return const Color(0xFF1B7F2E); // أخضر غامق
+        return const Color(0xFF1B7F2E);
       case 'on_the_way':
-        return const Color(0xFF1A56DB); // أزرق
+        return const Color(0xFF1A56DB);
       case 'matching_with_donor':
       case 'under_review':
-        return const Color(0xFFC1630B); // برتقالي
+        return const Color(0xFFC1630B);
       default:
-        return const Color(0xFF6B7280); // رمادي
+        return const Color(0xFF6B7280);
     }
   }
 
   Color _getStatusBgColor(OrderModel order) {
     switch (order.computedStatus) {
       case 'delivery_completed':
-        return const Color(0xFFBEF9C4); // أخضر فاتح
+        return const Color(0xFFBEF9C4);
       case 'on_the_way':
-        return const Color(0xFFDBEAFE); // أزرق فاتح
+        return const Color(0xFFDBEAFE);
       case 'matching_with_donor':
       case 'under_review':
-        return const Color(0xFFFFEDD5); // برتقالي فاتح
+        return const Color(0xFFFFEDD5);
       default:
-        return const Color(0xFFF3F4F6); // رمادي فاتح
+        return const Color(0xFFF3F4F6);
     }
   }
 
@@ -92,15 +101,7 @@ class _HomeDetailsRequesterState extends State<HomeDetailsRequester> {
                     ),
                   ),
                   SizedBox(width: screenWidth * 0.03),
-                  // ClipOval(
-                  //   child: Image.asset(
-                  //     'assets/images/profile.jpg',
-                  //     width: 40,
-                  //     height: 40,
-                  //     fit: BoxFit.cover,
-                  //   ),
-                  // ),
-                  Icon(Icons.person),
+                  // const Icon(Icons.person),
                 ],
               );
             },
@@ -113,10 +114,17 @@ class _HomeDetailsRequesterState extends State<HomeDetailsRequester> {
           BlocListener<RequesterCubit, RequesterState>(
             listener: (context, state) {
               if (state is RequesterError) {
+                ScaffoldMessenger.of(context).removeCurrentSnackBar();
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text(state.message),
-                    backgroundColor: Colors.red,
+                    content: Text(
+                      state.message,
+                      style: const TextStyle(
+                        color: Color(0xFFFF3333),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    backgroundColor: const Color.fromARGB(255, 224, 216, 216),
                   ),
                 );
               }
@@ -293,25 +301,42 @@ class _HomeDetailsRequesterState extends State<HomeDetailsRequester> {
     );
   }
 
+  // ── Banners مع PageIndicator ─────────────────────────────────────────────
   Widget _buildBannersSection(double screenWidth) {
-    return SizedBox(
-      height: 180,
-      child: ListView.builder(
-        itemCount: images.length,
-        reverse: true,
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) => Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: Image.asset(
-              images[index],
-              width: screenWidth * 0.85,
-              fit: BoxFit.cover,
+    return Column(
+      children: [
+        SizedBox(
+          height: 180,
+          child: PageView.builder(
+            reverse: true,
+            controller: _controller,
+            itemCount: images.length,
+            itemBuilder: (context, index) => Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.asset(
+                  images[index],
+                  width: screenWidth * 0.85,
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
           ),
         ),
-      ),
+        const SizedBox(height: 12),
+        SmoothPageIndicator(
+          textDirection: TextDirection.rtl,
+          controller: _controller,
+          count: images.length,
+          effect: const SwapEffect(
+            dotColor: Color(0xFFDEDBDB),
+            activeDotColor: Color(0XFFB3B3B3),
+            dotHeight: 9,
+            dotWidth: 9,
+          ),
+        ),
+      ],
     );
   }
 

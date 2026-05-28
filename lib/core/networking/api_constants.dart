@@ -1,6 +1,6 @@
 class ApiConstants {
   static const String baseUrl =
-      "https://mehtag-eh-production.up.railway.app/api/";
+      "https://mehtag-eh-production-1dea.up.railway.app/api/";
 
   static const String login = "auth/login";
   static const String createAdmin = "admin/create-admin";

@@ -161,10 +161,8 @@ class _SignUpDonorState extends State<SignUpDonor> {
                             SizedBox(height: 16.h),
                             CustomTextField(
                               width: double.infinity,
-                              suffixIcon: Image.asset(
-                                'assets/icons/oui_email.png',
-                                width: 24.r,
-                                height: 24.r,
+                              suffixIcon: Icon(
+                                Icons.email_outlined,
                                 color: const Color(0xff666666),
                               ),
                               hint: "البريد الالكتروني",

@@ -19,9 +19,10 @@ class Validators {
       return 'رقم الهاتف مطلوب';
     }
 
-    final regx = RegExp(r'^01[0-9]{9}$');
+    final regx = RegExp(r'^01[0125][0-9]{8}$');
+
     if (!regx.hasMatch(value)) {
-      return 'رقم الهاتف غير صحيح، يجب أن يكون 11 رقم يبدأ بـ 01';
+      return 'أدخل رقم هاتف مصري صحيح';
     }
 
     return null;

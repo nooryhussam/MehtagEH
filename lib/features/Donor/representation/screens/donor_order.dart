@@ -55,8 +55,11 @@ class _DonorOrderState extends State<DonorOrder> {
               } else if (state is DonorError) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text(state.message),
-                    backgroundColor: Colors.red,
+                    content: Text(
+                      state.message,
+                      style: TextStyle(color: Colors.red),
+                    ),
+                    backgroundColor: const Color.fromARGB(255, 251, 236, 235),
                   ),
                 );
               }

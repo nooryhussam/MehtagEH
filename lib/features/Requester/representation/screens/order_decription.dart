@@ -110,10 +110,17 @@ class _OrderDescriptionState extends State<OrderDescription> {
                   ),
                 );
               } else if (state is RequesterError) {
+                ScaffoldMessenger.of(context).removeCurrentSnackBar();
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text(state.message),
-                    backgroundColor: Colors.red,
+                    content: Text(
+                      state.message,
+                      style: const TextStyle(
+                        color: Color(0xFFFF3333),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    backgroundColor: const Color.fromARGB(255, 235, 229, 229),
                   ),
                 );
               }
@@ -164,9 +171,10 @@ class _OrderDescriptionState extends State<OrderDescription> {
                           value,
                           'برجاء إدخال الوصف',
                         ),
-                        hint: 'وصف الطلب',
-                        height: 120.h,
-                        maxLines: 3,
+                        hint:
+                            'اكتب تفاصيل الطلب بشكل بسيط يساعدنا نفهم احتياجك، مثل نوع الطلب، الأعمار أو المقاسات إن وجدت، وهل المستفيد ولد أم بنت.',
+                        height: 170.h,
+                        maxLines: 5,
                         width: double.infinity,
                         keyboardType: TextInputType.name,
                       ),
@@ -193,7 +201,6 @@ class _OrderDescriptionState extends State<OrderDescription> {
                       //   ),
                       // ),
                       SizedBox(height: 12.h),
-                      // ✅ بيظهر بس لو الـ requestType هو علاج أو دواء
                       if (widget.requestType == 'علاج' ||
                           widget.requestType == 'دواء') ...[
                         Align(
@@ -248,44 +255,7 @@ class _OrderDescriptionState extends State<OrderDescription> {
                         ),
                         SizedBox(height: 40.h),
                       ],
-                      // Align(
-                      //   alignment: Alignment.bottomRight,
-                      //   child: ElevatedButton.icon(
-                      //     onPressed: _pickImage,
-                      //     label: Text(
-                      //       _imagePath != null
-                      //           ? "تم اختيار صورة"
-                      //           : "صورة الروشتة",
-                      //       style: GoogleFonts.tajawal(
-                      //         color: const Color(0xff999999),
-                      //         fontSize: 12.sp,
-                      //         fontWeight: FontWeight.w400,
-                      //       ),
-                      //     ),
-                      //     icon: Icon(
-                      //       Icons.file_upload_outlined,
-                      //       color: const Color(0xFF666666),
-                      //       size: 20.r,
-                      //     ),
-                      //     iconAlignment: IconAlignment.end,
-                      //     style: ElevatedButton.styleFrom(
-                      //       shape: RoundedRectangleBorder(
-                      //         borderRadius: BorderRadius.circular(24.r),
-                      //       ),
-                      //       shadowColor: Colors.transparent,
-                      //       backgroundColor: const Color(0xffFEF2E7),
-                      //       side: const BorderSide(
-                      //         color: Colors.black,
-                      //         width: 0.5,
-                      //       ),
-                      //       padding: EdgeInsets.symmetric(
-                      //         horizontal: 16.w,
-                      //         vertical: 8.h,
-                      //       ),
-                      //       minimumSize: Size(140.w, 40.h),
-                      //     ),
-                      //   ),
-                      // ),
+
                       SizedBox(height: 40.h),
                       state is RequesterLoading
                           ? const CircularProgressIndicator(
