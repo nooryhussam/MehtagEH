@@ -28,7 +28,7 @@ class CardsRequester extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 24.w),
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
       width: double.infinity,
-      // ← لا height ثابتة
+
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(24.r),
@@ -42,10 +42,9 @@ class CardsRequester extends StatelessWidget {
             textDirection: TextDirection.rtl,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // ── الصورة على اليمين ─────────────────────────────────
               Image.asset(imagepath, width: 48.w, height: 48.h),
               SizedBox(width: 12.w),
-              // ── النص ─────────────────────────────────────────────
+
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -65,7 +64,7 @@ class CardsRequester extends StatelessWidget {
                           ),
                         ),
                         SizedBox(width: 8.w),
-                        // Status badge
+
                         Container(
                           padding: EdgeInsets.symmetric(
                             horizontal: 10.w,

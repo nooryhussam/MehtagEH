@@ -15,9 +15,8 @@ class OrderModel {
   final String? status;
   final String? requesterName;
   final String? priority;
-  final int quantity; // مدمج من النسخة الثانية
+  final int quantity;
 
-  // ── Pipeline fields from API (مراحل تتبع الطلب) ───────────────────────────
   final String? requestSubmitted;
   final String? underReview;
   final String? matchingWithDonor;
@@ -51,7 +50,6 @@ class OrderModel {
     this.createdAt,
   });
 
-  // ✅ تحويل الكائن إلى Map لإرساله إلى السيرفر
   Map<String, dynamic> toJson() {
     return {
       'needy_id': needyId,
@@ -71,9 +69,7 @@ class OrderModel {
     };
   }
 
-  // ✅ تحويل الـ JSON القادم من السيرفر إلى كائن OrderModel
   factory OrderModel.fromMap(Map<String, dynamic> map) {
-    // معالجة بيانات المحتاج (Needy) سواء كانت متداخلة أو مسطحة
     final needy = map['needy_id'] is Map
         ? map['needy_id'] as Map<String, dynamic>
         : map['needy'] as Map<String, dynamic>?;
@@ -122,9 +118,6 @@ class OrderModel {
     );
   }
 
-  // ── منطق عرض البيانات في الواجهة (Getters) ────────────────────────────────
-
-  // اختيار الصورة بناءً على نوع الطلب
   String get resolvedImage {
     switch (requestType) {
       case 'دواء':
@@ -144,7 +137,6 @@ class OrderModel {
   String get locationLabel =>
       village.isNotEmpty ? 'مصر، $village' : 'مصر، $city';
 
-  // تحديد الحالة البرمجية (للتعامل مع الـ UI)
   String get computedStatus {
     if (deliveryCompleted == 'completed') return 'delivery_completed';
     if (onTheWay == 'in_progress') return 'on_the_way';
@@ -153,7 +145,6 @@ class OrderModel {
     return 'request_submitted';
   }
 
-  // ترجمة الحالة للغة العربية للمستخدم
   String get statusLabel {
     if (deliveryCompleted == 'completed') return 'تم التوصيل';
     if (onTheWay == 'in_progress' || onTheWay == 'completed') {

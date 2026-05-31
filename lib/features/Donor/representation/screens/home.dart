@@ -180,7 +180,8 @@ class _HomeState extends State<Home> {
                           title: order.title,
                           subtitle: order.description,
                           imagepath: order.resolvedImage,
-                          textlocation: order.locationLabel,
+                          city: order.city,
+                          village: order.village,
                           score: order.priorityLabel,
                           onTap: () => Navigator.pushNamed(
                             context,
@@ -235,7 +236,8 @@ class _HomeState extends State<Home> {
                           title: order.title,
                           subtitle: order.description,
                           imagepath: order.resolvedImage,
-                          textlocation: order.locationLabel,
+                          city: order.city,
+                          village: order.village,
                           score: order.priorityLabel,
                           onTap: () => Navigator.pushNamed(
                             context,

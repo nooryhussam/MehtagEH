@@ -26,8 +26,6 @@ class ReqesterApi {
     }
   }
 
-  // FIX: server returns ALL needies as a list.
-  // We decode the JWT to get the userId, then find the matching record.
   Future<Either<String, RequesterModel>> getRequester({String? token}) async {
     try {
       final response = await DioHelper.getData(
@@ -40,7 +38,6 @@ class ReqesterApi {
 
       final raw = response.data;
 
-      // Unwrap { success, count, data: [ ... ] }
       List<dynamic> list;
       if (raw is List) {
         list = raw;
@@ -49,23 +46,18 @@ class ReqesterApi {
         if (inner is List) {
           list = inner;
         } else {
-          // Single object (e.g. signup response)
           return right(RequesterModel.fromJson(raw as Map<String, dynamic>));
         }
       } else {
         return left('تعذر تحميل بيانات المستخدم');
       }
 
-      // Extract userId from the JWT payload (no signature verification needed)
       String? userId;
       if (token != null) {
         userId = _extractUserIdFromToken(token);
         debugPrint('==== JWT userId: $userId ====');
       }
 
-      // Each list item looks like:
-      // { _id: { _id: "userId", name: "...", phone: "..." }, national_id_text, national_id_image }
-      // The nested _id object IS the full user record.
       Map<String, dynamic>? match;
 
       if (userId != null) {
@@ -85,7 +77,6 @@ class ReqesterApi {
         return left('لم يتم العثور على بيانات المستخدم');
       }
 
-      // Flatten into a shape that RequesterModel.fromJson understands
       final userObj = match['_id'] as Map<String, dynamic>;
       final normalised = <String, dynamic>{
         '_id': userObj['_id']?.toString(),
@@ -136,11 +127,8 @@ class ReqesterApi {
         token: token,
       );
 
-      // السيرفر بيرجع الطلب اللي اتكريت جوه حقل "data"
-      // الـ _unwrap اللي عندك في الملف وظيفتها تشيل الغلاف ده
       final orderData = _unwrap(response.data);
 
-      // تحويل البيانات لموديل عشان نقدر نبعته للـ Card
       return right(OrderModel.fromMap(orderData));
     } catch (e) {
       return left(_parseError(e));
@@ -166,7 +154,6 @@ class ReqesterApi {
     }
   }
 
-  // Decodes the JWT payload (no signature check) and returns the userId.
   String? _extractUserIdFromToken(String token) {
     try {
       final parts = token.split('.');
@@ -236,12 +223,10 @@ class ReqesterApi {
   }) async {
     try {
       final response = await DioHelper.getData(
-        // This uses the endpoint you provided: api/requests/needy/{id}
         endPoint: ApiConstants.needyRequests(needyId),
         token: token,
       );
 
-      // Using your existing _unwrapList to handle the { success, data: [] } structure
       final list = _unwrapList(response.data);
 
       return right(

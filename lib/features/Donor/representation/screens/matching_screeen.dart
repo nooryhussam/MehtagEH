@@ -55,7 +55,8 @@ class MatchingScreeen extends StatelessWidget {
                   title: req.title,
                   subtitle: req.description,
                   imagepath: _getImage(req.requestType),
-                  textlocation: req.fullLocation,
+                  city: req.city,
+                  village: req.village,
                   score: req.priority,
                   onTap: () {
                     Navigator.push(

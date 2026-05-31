@@ -9,7 +9,8 @@ class CardsDonor extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.imagepath,
-    required this.textlocation,
+    required this.city,
+    required this.village,
     required this.score,
     required this.onTap,
   });
@@ -17,7 +18,8 @@ class CardsDonor extends StatelessWidget {
   final String title;
   final String subtitle;
   final String imagepath;
-  final String textlocation;
+  final String city;
+  final String village;
   final String score;
   final VoidCallback onTap;
 
@@ -59,7 +61,7 @@ class CardsDonor extends StatelessWidget {
         border: Border.all(color: const Color(0xFFBEF9C4), width: 0.78.w),
       ),
       child: Column(
-        mainAxisSize: MainAxisSize.min, // ← مهم
+        mainAxisSize: MainAxisSize.min,
         textDirection: TextDirection.rtl,
         children: [
           ListTile(
@@ -99,7 +101,7 @@ class CardsDonor extends StatelessWidget {
               ),
               SizedBox(width: 4.w),
               Text(
-                textlocation,
+                "$city، $village",
                 style: GoogleFonts.tajawal(
                   fontSize: 13.sp,
                   fontWeight: FontWeight.w400,
@@ -107,7 +109,6 @@ class CardsDonor extends StatelessWidget {
                 ),
                 overflow: TextOverflow.ellipsis,
               ),
-
               SizedBox(width: 16.w),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),

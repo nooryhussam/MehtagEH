@@ -8,7 +8,6 @@ import 'package:mahtage_eh/features/Donor/data/model/donor_model.dart';
 import 'package:mahtage_eh/features/Requester/data/model/order_model.dart';
 
 class DonorApi {
-  // ── Send donation confirmation ────────────────────────────────────────────
   Future<void> sendDonation(String requestId, String token) async {
     final response = await DioHelper.postData(
       endPoint: ApiConstants.sendDonation(requestId),
@@ -69,7 +68,6 @@ class DonorApi {
     }
   }
 
-  // ── Donor signup ──────────────────────────────────────────────────────────
   Future<Either<String, DonorModel>> postDonor(DonorModel donor) async {
     try {
       final response = await DioHelper.postData(
@@ -82,7 +80,6 @@ class DonorApi {
     }
   }
 
-  // ── Donor login ───────────────────────────────────────────────────────────
   Future<Either<String, DonorModel>> login({
     required String phone,
     required String password,
@@ -98,7 +95,6 @@ class DonorApi {
     }
   }
 
-  // ── Get approved requests ─────────────────────────────────────────────────
   Future<Either<String, List<OrderModel>>> getApprovedRequests({
     required String token,
   }) async {
@@ -118,7 +114,6 @@ class DonorApi {
     }
   }
 
-  // ── Get single request (tracking) ────────────────────────────────────────
   Future<Either<String, OrderModel>> getDonationStatus({
     required String requestId,
     required String token,
@@ -134,7 +129,6 @@ class DonorApi {
     }
   }
 
-  // ── Helpers ───────────────────────────────────────────────────────────────
   Map<String, dynamic> _unwrap(dynamic raw) {
     if (raw is Map<String, dynamic>) {
       return raw['data'] as Map<String, dynamic>? ?? raw;
@@ -151,12 +145,31 @@ class DonorApi {
     throw Exception('Unexpected list response format: $raw');
   }
 
+  // String _parseError(Object e) {
+  //   try {
+  //     final msg = (e as dynamic).response?.data?['message'];
+  //     if (msg != null) return msg.toString();
+  //   } catch (_) {}
+  //   return e.toString();
+  // }
   String _parseError(Object e) {
-    try {
-      final msg = (e as dynamic).response?.data?['message'];
-      if (msg != null) return msg.toString();
-    } catch (_) {}
-    return e.toString();
+    if (e is DioException) {
+      switch (e.response?.statusCode) {
+        case 404:
+          return 'البيانات مش موجودة';
+        case 400:
+          return 'هذا الحساب مسجل بالفعل';
+        case 401:
+          return 'يرجى تسجيل الدخول مرة أخرى';
+        case 403:
+          return 'مش مسموحلك بالدخول';
+        case 500:
+          return 'مشكلة في السيرفر، حاول تاني';
+        default:
+          return 'حدث خطأ، حاول مرة أخرى';
+      }
+    }
+    return 'حدث خطأ غير متوقع';
   }
 
   Future<Either<String, OrderModel>> getRequestById({
