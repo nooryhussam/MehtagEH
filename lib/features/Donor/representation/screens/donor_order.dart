@@ -65,185 +65,199 @@ class _DonorOrderState extends State<DonorOrder> {
               }
             },
             builder: (context, state) {
-              return SingleChildScrollView(
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    textDirection: TextDirection.rtl,
-                    children: [
-                      Row(
+              final isLoading = state is DonorLoading;
+
+              return Stack(
+                children: [
+                  SingleChildScrollView(
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
                         textDirection: TextDirection.rtl,
                         children: [
-                          IconButton(
-                            onPressed: () => Navigator.pop(context),
-                            icon: Icon(
-                              Icons.arrow_forward_ios,
+                          Row(
+                            textDirection: TextDirection.rtl,
+                            children: [
+                              IconButton(
+                                onPressed: () => Navigator.pop(context),
+                                icon: Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: Colors.black,
+                                  size: 22.r,
+                                ),
+                              ),
+                              Expanded(
+                                child: Center(
+                                  child: Image.asset(
+                                    'assets/images/logo.png',
+                                    height: 50.h,
+                                    width: 72.w,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 48.w),
+                            ],
+                          ),
+                          SizedBox(height: 8.h),
+                          Text(
+                            "تسجيل تبرع",
+                            style: GoogleFonts.tajawal(
                               color: Colors.black,
-                              size: 22.r,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 24.sp,
                             ),
                           ),
-                          Expanded(
-                            child: Center(
-                              child: Image.asset(
-                                'assets/images/logo.png',
-                                height: 50.h,
-                                width: 72.w,
+                          SizedBox(height: 8.h),
+                          Text(
+                            "يرجى تسجيل بيانات التبرع",
+                            style: GoogleFonts.tajawal(
+                              color: const Color(0xFF747476),
+                              fontWeight: FontWeight.w400,
+                              fontSize: 14.sp,
+                            ),
+                          ),
+                          SizedBox(height: 50.h),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              "نوع التبرع",
+                              style: GoogleFonts.tajawal(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16.sp,
                               ),
                             ),
                           ),
-                          SizedBox(width: 48.w),
+                          SizedBox(height: 8.h),
+                          CustomDropdownField(
+                            value: selectedCategory,
+                            hintText: '',
+                            items: donorCategory,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'برجاء اختيار نوع التبرع';
+                              }
+                              return null;
+                            },
+                            onChanged: (val) =>
+                                setState(() => selectedCategory = val),
+                          ),
+                          SizedBox(height: 16.h),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              "وقت التوفر",
+                              style: GoogleFonts.tajawal(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16.sp,
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 8.h),
+                          CustomDropdownField(
+                            value: selectedTime,
+                            hintText: '',
+                            items: donortime,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'برجاء اختيار وقت التوفر';
+                              }
+                              return null;
+                            },
+                            onChanged: (val) =>
+                                setState(() => selectedTime = val),
+                          ),
+                          SizedBox(height: 16.h),
+                          CustomTextField(
+                            controller: _quantityController,
+                            validator: (val) =>
+                                Validators.numeric(val, 'برجاء ادخال الكمية'),
+                            hint: 'الكمية',
+                            keyboardType: TextInputType.number,
+                          ),
+                          SizedBox(height: 16.h),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              "الموقع",
+                              style: GoogleFonts.tajawal(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16.sp,
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 8.h),
+                          Row(
+                            textDirection: TextDirection.rtl,
+                            children: [
+                              Expanded(
+                                child: CustomTextField(
+                                  controller: _cityController,
+                                  validator: (value) =>
+                                      Validators.validateRequired(
+                                        value,
+                                        'برجاء اكمال البيانات',
+                                      ),
+                                  hint: 'مدينة',
+                                  keyboardType: TextInputType.streetAddress,
+                                ),
+                              ),
+                              SizedBox(width: 16.w),
+                              Expanded(
+                                child: CustomTextField(
+                                  controller: _villageController,
+                                  validator: (value) =>
+                                      Validators.validateRequired(
+                                        value,
+                                        'برجاء اكمال البيانات',
+                                      ),
+                                  hint: 'قرية',
+                                  keyboardType: TextInputType.streetAddress,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 110.h),
+                          AppButton(
+                            text: 'تأكيد',
+                            onTap: isLoading
+                                ? () {}
+                                : () {
+                                    if (_formKey.currentState!.validate()) {
+                                      final donation = DonationModel(
+                                        donationType: selectedCategory!,
+                                        availability: selectedTime!,
+                                        location: _cityController.text.trim(),
+                                        village: _villageController.text.trim(),
+                                        quantity:
+                                            int.tryParse(
+                                              _quantityController.text.trim(),
+                                            ) ??
+                                            0,
+                                      );
+                                      context.read<DonorCubit>().createDonation(
+                                        donation,
+                                      );
+                                    }
+                                  },
+                            size: Size(279.w, 48.h),
+                          ),
+                          SizedBox(height: 24.h),
                         ],
                       ),
-                      SizedBox(height: 8.h),
-                      Text(
-                        "تسجيل تبرع",
-                        style: GoogleFonts.tajawal(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 24.sp,
-                        ),
-                      ),
-                      SizedBox(height: 8.h),
-                      Text(
-                        "يرجى تسجيل بيانات التبرع",
-                        style: GoogleFonts.tajawal(
-                          color: const Color(0xFF747476),
-                          fontWeight: FontWeight.w400,
-                          fontSize: 14.sp,
-                        ),
-                      ),
-                      SizedBox(height: 50.h),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          "نوع التبرع",
-                          style: GoogleFonts.tajawal(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16.sp,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 8.h),
-                      CustomDropdownField(
-                        value: selectedCategory,
-                        hintText: '',
-                        items: donorCategory,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'برجاء اختيار نوع التبرع';
-                          }
-                          return null;
-                        },
-                        onChanged: (val) =>
-                            setState(() => selectedCategory = val),
-                      ),
-                      SizedBox(height: 16.h),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          "وقت التوفر",
-                          style: GoogleFonts.tajawal(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16.sp,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 8.h),
-                      CustomDropdownField(
-                        value: selectedTime,
-                        hintText: '',
-                        items: donortime,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'برجاء اختيار وقت التوفر';
-                          }
-                          return null;
-                        },
-                        onChanged: (val) => setState(() => selectedTime = val),
-                      ),
-                      SizedBox(height: 16.h),
-                      CustomTextField(
-                        controller: _quantityController,
-                        validator: (val) =>
-                            Validators.numeric(val, 'برجاء ادخال الكمية'),
-                        hint: 'الكمية',
-                        keyboardType: TextInputType.number,
-                      ),
-                      SizedBox(height: 16.h),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          "الموقع",
-                          style: GoogleFonts.tajawal(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16.sp,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 8.h),
-                      Row(
-                        textDirection: TextDirection.rtl,
-                        children: [
-                          Expanded(
-                            child: CustomTextField(
-                              controller: _cityController,
-                              validator: (value) => Validators.validateRequired(
-                                value,
-                                'برجاء اكمال البيانات',
-                              ),
-                              hint: 'مدينة',
-                              keyboardType: TextInputType.streetAddress,
-                            ),
-                          ),
-                          SizedBox(width: 16.w),
-                          Expanded(
-                            child: CustomTextField(
-                              controller: _villageController,
-                              validator: (value) => Validators.validateRequired(
-                                value,
-                                'برجاء اكمال البيانات',
-                              ),
-                              hint: 'قرية',
-                              keyboardType: TextInputType.streetAddress,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 110.h),
-                      state is DonorLoading
-                          ? const CircularProgressIndicator(
-                              color: Color(0xFF2BA12F),
-                            )
-                          : AppButton(
-                              text: 'تأكيد',
-                              onTap: () {
-                                if (_formKey.currentState!.validate()) {
-                                  final donation = DonationModel(
-                                    donationType: selectedCategory!,
-                                    availability: selectedTime!,
-                                    location: _cityController.text.trim(),
-                                    village: _villageController.text.trim(),
-                                    quantity:
-                                        int.tryParse(
-                                          _quantityController.text.trim(),
-                                        ) ??
-                                        0,
-                                  );
-                                  context.read<DonorCubit>().createDonation(
-                                    donation,
-                                  );
-                                }
-                              },
-                              size: Size(279.w, 48.h),
-                            ),
-                      SizedBox(height: 24.h),
-                    ],
+                    ),
                   ),
-                ),
+
+                  if (isLoading)
+                    const Center(
+                      child: CircularProgressIndicator(
+                        color: Color(0xFF2BA12F),
+                      ),
+                    ),
+                ],
               );
             },
           ),

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mahtage_eh/core/presentation/choose_user.dart';
 import 'package:mahtage_eh/core/presentation/loginin.dart';
 import 'package:mahtage_eh/core/presentation/on_boarding.dart';
-import 'package:mahtage_eh/core/presentation/splash_screen.dart';
+import 'package:mahtage_eh/core/presentation/splash_screen_two.dart';
+
 import 'package:mahtage_eh/features/Donor/data/model/recommendation_model.dart';
 import 'package:mahtage_eh/features/Donor/representation/screens/donor_order.dart';
 import 'package:mahtage_eh/features/Donor/representation/screens/help_screen.dart';
@@ -36,7 +37,9 @@ class AppRouter {
       case AppRoutes.onboarding:
         return MaterialPageRoute(builder: (_) => const OnBoarding());
 
-      case AppRoutes.splashScreen:
+      // case AppRoutes.splashScreen:
+      //   return MaterialPageRoute(builder: (_) => const SplashScreen());
+      case AppRoutes.splashScreenTwo:
         return MaterialPageRoute(builder: (_) => const SplashScreen());
 
       case AppRoutes.chooseUser:
@@ -141,7 +144,6 @@ class AppRouter {
             hasDisability: false,
           ),
         );
-
       case AppRoutes.orderTracking:
         final order = settings.arguments as OrderModel?;
         if (order == null) return _orderNotFound();

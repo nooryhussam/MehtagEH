@@ -45,6 +45,7 @@ class _OrderDescriptionState extends State<OrderDescription> {
   final _quantityController = TextEditingController();
   String? _imagePath;
   OrderModel? _lastCreatedOrder;
+
   @override
   void dispose() {
     _nameController.dispose();
@@ -61,6 +62,32 @@ class _OrderDescriptionState extends State<OrderDescription> {
     );
     if (picked == null) return;
     setState(() => _imagePath = picked.path);
+  }
+
+  void _onSubmit(BuildContext context) {
+    if (!_formKey.currentState!.validate()) return;
+
+    final cubit = context.read<RequesterCubit>();
+    debugPrint('==== SUBMIT ARGS ====');
+    debugPrint('User ID: ${cubit.currentUser?.id}');
+
+    final order = OrderModel(
+      needyId: cubit.currentUser?.id,
+      requestType: widget.requestType,
+      age: widget.age,
+      workStatus: widget.workStatus,
+      isFamily: widget.isFamily,
+      familyMembers: widget.familyMembers,
+      city: widget.city,
+      village: widget.village,
+      hasDisability: widget.hasDisability,
+      title: _nameController.text.trim(),
+      description: _descriptionController.text.trim(),
+      prescriptionImage: _imagePath,
+    );
+
+    setState(() => _lastCreatedOrder = order);
+    cubit.createRequest(order);
   }
 
   @override
@@ -126,6 +153,8 @@ class _OrderDescriptionState extends State<OrderDescription> {
               }
             },
             builder: (context, state) {
+              final isLoading = state is RequesterLoading;
+
               return Form(
                 key: _formKey,
                 child: SingleChildScrollView(
@@ -151,6 +180,7 @@ class _OrderDescriptionState extends State<OrderDescription> {
                         ),
                       ),
                       SizedBox(height: 32.h),
+
                       CustomTextField(
                         controller: _nameController,
                         validator: (value) {
@@ -165,6 +195,7 @@ class _OrderDescriptionState extends State<OrderDescription> {
                         keyboardType: TextInputType.name,
                       ),
                       SizedBox(height: 16.h),
+
                       CustomTextField(
                         controller: _descriptionController,
                         validator: (value) => Validators.validateRequired(
@@ -179,6 +210,7 @@ class _OrderDescriptionState extends State<OrderDescription> {
                         keyboardType: TextInputType.name,
                       ),
                       SizedBox(height: 16.h),
+
                       CustomTextField(
                         controller: _quantityController,
                         validator: (val) =>
@@ -189,18 +221,7 @@ class _OrderDescriptionState extends State<OrderDescription> {
                         keyboardType: TextInputType.number,
                       ),
                       SizedBox(height: 24.h),
-                      // Align(
-                      //   alignment: Alignment.bottomRight,
-                      //   child: Text(
-                      //     "ارفق صورة للروشتة الطبية (فى حالة العلاج)",
-                      //     style: GoogleFonts.tajawal(
-                      //       color: const Color(0xff666666),
-                      //       fontSize: 14.sp,
-                      //       fontWeight: FontWeight.w400,
-                      //     ),
-                      //   ),
-                      // ),
-                      SizedBox(height: 12.h),
+
                       if (widget.requestType == 'علاج' ||
                           widget.requestType == 'دواء') ...[
                         Align(
@@ -257,45 +278,15 @@ class _OrderDescriptionState extends State<OrderDescription> {
                       ],
 
                       SizedBox(height: 40.h),
-                      state is RequesterLoading
-                          ? const CircularProgressIndicator(
-                              color: Color(0xFFF38C2B),
-                            )
-                          : AppButton(
-                              text: 'تأكيد',
-                              textSize: 16,
-                              borderRadius: 10,
-                              size: Size(279.w, 48.h),
-                              onTap: () {
-                                if (_formKey.currentState!.validate()) {
-                                  final cubit = context.read<RequesterCubit>();
 
-                                  debugPrint('==== SUBMIT ARGS ====');
+                      AppButton(
+                        text: 'تأكيد',
+                        textSize: 16,
+                        borderRadius: 24,
+                        size: Size(279.w, 48.h),
+                        onTap: isLoading ? () {} : () => _onSubmit(context),
+                      ),
 
-                                  debugPrint(
-                                    'User ID: ${cubit.currentUser?.id}',
-                                  );
-
-                                  final order = OrderModel(
-                                    needyId: cubit.currentUser?.id,
-                                    requestType: widget.requestType,
-                                    age: widget.age,
-                                    workStatus: widget.workStatus,
-                                    isFamily: widget.isFamily,
-                                    familyMembers: widget.familyMembers,
-                                    city: widget.city,
-                                    village: widget.village,
-                                    hasDisability: widget.hasDisability,
-                                    title: _nameController.text.trim(),
-                                    description: _descriptionController.text
-                                        .trim(),
-                                    prescriptionImage: _imagePath,
-                                  );
-                                  setState(() => _lastCreatedOrder = order);
-                                  cubit.createRequest(order);
-                                }
-                              },
-                            ),
                       SizedBox(height: 24.h),
                     ],
                   ),

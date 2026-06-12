@@ -21,6 +21,10 @@ class _RegisterDetailsScreenState extends State<RegisterDetailsScreen> {
   String? selectedTypeFamily;
   int? hasChildren;
   int? hasDisability;
+
+  // يتحول true بس لما المستخدم يضغط استمرار
+  bool _validateRadios = false;
+
   final _formKey = GlobalKey<FormState>();
   final _cityController = TextEditingController();
   final _villageController = TextEditingController();
@@ -38,6 +42,35 @@ class _RegisterDetailsScreenState extends State<RegisterDetailsScreen> {
     _ageController.dispose();
     _familyMembersController.dispose();
     super.dispose();
+  }
+
+  void _onSubmit() {
+    setState(() => _validateRadios = true);
+
+    final formValid = _formKey.currentState!.validate();
+    final radiosValid = hasChildren != null && hasDisability != null;
+
+    if (!formValid || !radiosValid) return;
+
+    final isFamily = selectedTypeFamily == 'أسرة';
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => OrderDescription(
+          requestType: widget.requestType,
+          age: int.tryParse(_ageController.text) ?? 0,
+          workStatus: selectedJob ?? '',
+          isFamily: isFamily,
+          familyMembers: isFamily
+              ? (int.tryParse(_familyMembersController.text) ?? 0)
+              : 0,
+          city: _cityController.text.trim(),
+          village: _villageController.text.trim(),
+          hasDisability: hasDisability == 1,
+        ),
+      ),
+    );
   }
 
   @override
@@ -187,42 +220,19 @@ class _RegisterDetailsScreenState extends State<RegisterDetailsScreen> {
                   'هل يوجد اطفال؟',
                   hasChildren,
                   (val) => setState(() => hasChildren = val),
+                  showError: _validateRadios && hasChildren == null,
                 ),
                 _buildRadioRow(
                   'هل يوجد إعاقة؟',
                   hasDisability,
                   (val) => setState(() => hasDisability = val),
+                  showError: _validateRadios && hasDisability == null,
                 ),
                 SizedBox(height: 40.h),
 
                 AppButton(
                   text: 'استمرار',
-                  onTap: () {
-                    if (_formKey.currentState!.validate()) {
-                      final isFamily = selectedTypeFamily == 'أسرة';
-
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => OrderDescription(
-                            requestType: widget.requestType,
-                            age: int.tryParse(_ageController.text) ?? 0,
-                            workStatus: selectedJob ?? '',
-                            isFamily: isFamily,
-                            familyMembers: isFamily
-                                ? (int.tryParse(
-                                        _familyMembersController.text,
-                                      ) ??
-                                      0)
-                                : 0,
-                            city: _cityController.text.trim(),
-                            village: _villageController.text.trim(),
-                            hasDisability: hasDisability == 1,
-                          ),
-                        ),
-                      );
-                    }
-                  },
+                  onTap: _onSubmit,
                   size: Size(279.w, 48.h),
                 ),
                 SizedBox(height: 24.h),
@@ -237,34 +247,49 @@ class _RegisterDetailsScreenState extends State<RegisterDetailsScreen> {
   Widget _buildRadioRow(
     String title,
     int? groupValue,
-    Function(int?) onChanged,
-  ) {
+    Function(int?) onChanged, {
+    bool showError = false,
+    String errorText = 'يرجى اختيار أحد الخيارات',
+  }) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8.h),
-      child: Row(
-        textDirection: TextDirection.rtl,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Text(title, style: TextStyle(fontSize: 14.sp)),
           Row(
+            textDirection: TextDirection.rtl,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('نعم', style: TextStyle(fontSize: 13.sp)),
-              Radio<int>(
-                value: 1,
-                groupValue: groupValue,
-                onChanged: onChanged,
-                activeColor: primaryGreen,
-              ),
-              SizedBox(width: 8.w),
-              Text('لا', style: TextStyle(fontSize: 13.sp)),
-              Radio<int>(
-                value: 0,
-                groupValue: groupValue,
-                onChanged: onChanged,
-                activeColor: primaryGreen,
+              Text(title, style: TextStyle(fontSize: 14.sp)),
+              Row(
+                children: [
+                  Text('نعم', style: TextStyle(fontSize: 13.sp)),
+                  Radio<int>(
+                    value: 1,
+                    groupValue: groupValue,
+                    onChanged: onChanged,
+                    activeColor: primaryGreen,
+                  ),
+                  SizedBox(width: 8.w),
+                  Text('لا', style: TextStyle(fontSize: 13.sp)),
+                  Radio<int>(
+                    value: 0,
+                    groupValue: groupValue,
+                    onChanged: onChanged,
+                    activeColor: primaryGreen,
+                  ),
+                ],
               ),
             ],
           ),
+          if (showError)
+            Padding(
+              padding: EdgeInsets.only(top: 4.h, right: 4.w),
+              child: Text(
+                errorText,
+                style: TextStyle(color: Colors.red, fontSize: 11.sp),
+              ),
+            ),
         ],
       ),
     );

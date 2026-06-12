@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mahtage_eh/core/routing/routes.dart';
 import 'package:mahtage_eh/features/Requester/representation/cubit/requester_cubit.dart';
 import 'package:mahtage_eh/features/Requester/representation/cubit/requester_state.dart';
+import 'package:mahtage_eh/features/Requester/representation/screens/requester_details.dart';
 import 'package:mahtage_eh/features/Requester/representation/screens/tracking.dart';
 import 'package:mahtage_eh/features/auth/auth_cubit.dart';
 import 'package:mahtage_eh/features/auth/auth_state.dart';
@@ -284,16 +285,19 @@ class _HomeDetailsRequesterState extends State<HomeDetailsRequester> {
               context,
               'assets/images/Frame 2187.png',
               screenWidth,
+              'طعام',
             ),
             _buildServiceIcon(
               context,
               'assets/images/Frame 2608602.png',
               screenWidth,
+              'علاج',
             ),
             _buildServiceIcon(
               context,
               'assets/images/Frame 2608603.png',
               screenWidth,
+              'لبس',
             ),
           ],
         ),
@@ -301,7 +305,6 @@ class _HomeDetailsRequesterState extends State<HomeDetailsRequester> {
     );
   }
 
-  // ── Banners مع PageIndicator ─────────────────────────────────────────────
   Widget _buildBannersSection(double screenWidth) {
     return Column(
       children: [
@@ -344,9 +347,15 @@ class _HomeDetailsRequesterState extends State<HomeDetailsRequester> {
     BuildContext context,
     String asset,
     double screenWidth,
+    String requestType,
   ) {
     return InkWell(
-      onTap: () => Navigator.pushNamed(context, AppRoutes.requestOrder),
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => RegisterDetailsScreen(requestType: requestType),
+        ),
+      ),
       child: Image.asset(
         asset,
         width: screenWidth * 0.28,

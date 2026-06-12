@@ -25,10 +25,7 @@ class CardTracking extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 24.w),
-      padding: EdgeInsets.symmetric(
-        horizontal: 20.76.w,
-        vertical: 16.h,
-      ),
+      padding: EdgeInsets.symmetric(horizontal: 20.76.w, vertical: 16.h),
       width: 333.w,
       decoration: BoxDecoration(
         color: Colors.white,
@@ -43,6 +40,8 @@ class CardTracking extends StatelessWidget {
             contentPadding: EdgeInsets.zero,
             trailing: Image.asset(imagePath, width: 48.w, height: 48.h),
             title: Column(
+              mainAxisSize: MainAxisSize.min,
+
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Row(
@@ -76,7 +75,7 @@ class CardTracking extends StatelessWidget {
                         ),
                         textAlign: TextAlign.right,
                         overflow: TextOverflow.ellipsis,
-                            maxLines: 2,
+                        maxLines: 2,
                       ),
                     ),
                   ],

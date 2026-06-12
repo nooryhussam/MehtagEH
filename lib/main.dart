@@ -41,9 +41,9 @@ class MyApp extends StatelessWidget {
                 seedColor: const Color(0xFF1B5E20),
               ),
             ),
-            // Routing configuration
             onGenerateRoute: AppRouter.generateRoute,
-            initialRoute: AppRoutes.splashScreen,
+
+            initialRoute: AppRoutes.splashScreenTwo,
           ),
         );
       },

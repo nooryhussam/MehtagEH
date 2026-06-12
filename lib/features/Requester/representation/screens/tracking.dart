@@ -15,7 +15,7 @@ class OrderTrackingScreen extends StatelessWidget {
         return 'assets/images/firstaid.png';
 
       case 'لبس':
-        return 'assets/images/cl2.png';
+        return 'assets/images/clothes.png';
       case 'طعام':
         return 'assets/images/food.png';
       default:
@@ -133,7 +133,11 @@ class OrderTrackingScreen extends StatelessWidget {
                       color: Color(0xFF2BA12F),
                       borderRadius: BorderRadius.circular(14),
                     ),
-                    child: Image.asset(_image, width: 36, height: 36),
+                    child: Image.asset(
+                      _image,
+                      width: 29.640003204345703,
+                      height: 29.640003204345703,
+                    ),
                   ),
                 ],
               ),

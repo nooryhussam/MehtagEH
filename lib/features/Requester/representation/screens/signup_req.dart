@@ -88,7 +88,6 @@ class _SignUpReqstate extends State<SignUpReq> {
               }
             },
           ),
-          // ── Listener 2: Signup result ──
           BlocListener<RequesterCubit, RequesterState>(
             listener: (context, state) {
               if (state is SignupSuccess) {

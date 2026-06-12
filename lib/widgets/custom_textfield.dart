@@ -29,7 +29,7 @@ class CustomTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final field = TextFormField(
-   obscureText: obscureText,
+      obscureText: obscureText,
       textDirection: TextDirection.rtl,
       textAlign: TextAlign.right,
       cursorColor: Colors.black,

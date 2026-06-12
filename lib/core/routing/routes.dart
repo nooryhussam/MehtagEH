@@ -4,6 +4,7 @@ class AppRoutes {
   static const String splashScreen = '/splash_screen.dart';
   static const String chooseUser = '/choose_user.dart';
   static const String loginScreen = '/login.dart';
+  static const String splashScreenTwo = '/splash_screen_two.dart';
 
   //Donor Screens
   static const String homeScreenDonor = '/home.dart';
