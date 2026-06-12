@@ -17,26 +17,6 @@ class DonorApi {
     return response.data;
   }
 
-  // ── Post donation & get recommendations ───────────────────────────────────
-  // Future<Either<String, DonationModel>> postDonation({
-  //   required DonationModel donation,
-  //   required String token,
-  // }) async {
-  //   try {
-  //     final response = await DioHelper.postData(
-  //       endPoint: ApiConstants.donations,
-  //       data: donation.toJson(),
-  //       token: token,
-  //     );
-
-  //     return right(
-  //       DonationModel.fromJson(response.data as Map<String, dynamic>),
-  //     );
-  //   } catch (e) {
-  //     return left(_parseError(e));
-  //   }
-  // }
-
   Future<Either<String, DonationModel>> postDonation({
     required DonationModel donation,
     required String token,
@@ -145,19 +125,16 @@ class DonorApi {
     throw Exception('Unexpected list response format: $raw');
   }
 
-  // String _parseError(Object e) {
-  //   try {
-  //     final msg = (e as dynamic).response?.data?['message'];
-  //     if (msg != null) return msg.toString();
-  //   } catch (_) {}
-  //   return e.toString();
-  // }
   String _parseError(Object e) {
     if (e is DioException) {
       switch (e.response?.statusCode) {
         case 404:
           return 'البيانات مش موجودة';
         case 400:
+          final errors = e.response?.data?['errors'];
+          if (errors != null && errors is List && errors.isNotEmpty) {
+            return errors[0]['msg']?.toString() ?? 'هذا الحساب مسجل بالفعل';
+          }
           return 'هذا الحساب مسجل بالفعل';
         case 401:
           return 'يرجى تسجيل الدخول مرة أخرى';

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/services.dart';
 
 class CustomTextField extends StatelessWidget {
   const CustomTextField({
@@ -13,6 +14,7 @@ class CustomTextField extends StatelessWidget {
     this.height,
     this.width,
     this.maxLines = 1,
+    this.inputFormatters,
     this.obscureText = false,
   });
 
@@ -26,6 +28,7 @@ class CustomTextField extends StatelessWidget {
   final TextInputType? keyboardType;
   final int maxLines;
   final bool obscureText;
+  final List<TextInputFormatter>? inputFormatters;
   @override
   Widget build(BuildContext context) {
     final field = TextFormField(
@@ -39,6 +42,7 @@ class CustomTextField extends StatelessWidget {
       maxLines: maxLines,
       minLines: maxLines == 1 ? 1 : maxLines,
       textAlignVertical: TextAlignVertical.top,
+      inputFormatters: inputFormatters,
       decoration: InputDecoration(
         suffixIcon: suffixIcon,
         prefixIcon: prefixIcon,
