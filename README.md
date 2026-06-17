@@ -47,9 +47,8 @@ Authentication and profile management ensure that users can safely access and ma
 |---------|------------|
 | Frontend | Flutter |
 | Backend | Node.js (Express) |
-| Database | PostgreSQL / Firebase Firestore |
-| OCR | Google Cloud Vision API / Tesseract |
-| AI Components | Python-based Matching and Priority Scoring |
+| OCR | CRNN |
+| AI Components | Python-based Matching  |
 
 ## Project Goals
 
