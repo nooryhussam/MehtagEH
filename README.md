@@ -22,9 +22,8 @@ Mehtag-EH bridges the gap between those willing to donate (food, clothing, medic
 - View past and current requests
 
 ### Shared
-- Arabic-first UI with full RTL layout support
 - Real-time status tracking with visual timelines
-- Priority-based request classification (عاجل / متوسط / منخفض)
+- Priority-based request classification 
 
 ## Tech Stack
 
