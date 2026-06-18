@@ -1,4 +1,4 @@
-# Mehtag-EH (محتاج إيه)
+# Mehtag-EH
 
 A humanitarian aid and donation-matching mobile application that connects donors with people in need, built as a graduation project for EELU.
 
@@ -163,9 +163,6 @@ Requires a Mac with Xcode installed and a valid signing configuration in `ios/Ru
 - **Pub get fails:** confirm your Flutter/Dart SDK versions match what's declared in `pubspec.yaml`.
 - **Fonts/icons missing after release build:** this is expected — Flutter tree-shakes unused icon glyphs in release mode; functionality is unaffected.
 
-## Localization
-
-The app is built Arabic-first with RTL layouts throughout. Error messages, dates, and UI strings are localized inline rather than through a separate l10n pipeline.
 
 ## Status
 
